@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Installation file for miniOrange LDAP Module.
+ */
+use Drupal\ldap_auth\feedback;
+/**
+ * hook_uninstall not needed.
+ * Configure variables are cleared when module is uninstalled.
+ **/
+
+
+function ldap_auth_uninstall() {
+       if(\Drupal::config('ldap_auth.settings')->get('miniorange_ldap_feedback_status') == '1') {
+          \Drupal::configFactory()->getEditable('ldap_auth.settings')->clear('miniorange_ldap_feedback_status')->save();   
+          feedback::ldap_auth_feedback();
+        }
+}
+function ldap_auth_install()
+{
+     \Drupal::configFactory()->getEditable('ldap_auth.settings')->set('miniorange_ldap_feedback_status', '1')->save();
+}
+?>
+
+

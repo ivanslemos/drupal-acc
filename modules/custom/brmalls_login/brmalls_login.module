@@ -1,0 +1,443 @@
+<?php
+
+/**
+ * @file
+ * Enables the user registration and login system.
+ */
+
+use Drupal\Component\Utility\Crypt;
+use Drupal\Component\Render\PlainTextOutput;
+use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Access\AccessibleInterface;
+use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\Core\Site\Settings;
+use Drupal\Core\Url;
+use Drupal\image\Plugin\Field\FieldType\ImageItem;
+use Drupal\system\Entity\Action;
+use Drupal\user\Entity\Role;
+use Drupal\user\Entity\User;
+use Drupal\user\RoleInterface;
+use Drupal\user\UserInterface;
+
+/**
+ * Maximum length of username text field.
+ *
+ * Keep this under 191 characters so we can use a unique constraint in MySQL.
+ *
+ * @deprecated in drupal:8.3.0 and is removed from drupal:9.0.0.
+ *   Use \Drupal\user\UserInterface::USERNAME_MAX_LENGTH instead.
+ *
+ * @see https://www.drupal.org/node/2831620
+ */
+const USERNAME_MAX_LENGTH = 60;
+
+/**
+ * Only administrators can create user accounts.
+ *
+ * @deprecated in drupal:8.3.0 and is removed from drupal:9.0.0.
+ *   Use \Drupal\user\UserInterface::REGISTER_ADMINISTRATORS_ONLY instead.
+ *
+ * @see https://www.drupal.org/node/2831620
+ */
+const USER_REGISTER_ADMINISTRATORS_ONLY = 'admin_only';
+
+/**
+ * Visitors can create their own accounts.
+ *
+ * @deprecated in drupal:8.3.0 and is removed from drupal:9.0.0.
+ *   Use \Drupal\user\UserInterface::REGISTER_VISITORS instead.
+ *
+ * @see https://www.drupal.org/node/2831620
+ */
+const USER_REGISTER_VISITORS = 'visitors';
+
+/**
+ * Visitors can create accounts, but they don't become active without
+ * administrative approval.
+ *
+ * @deprecated in drupal:8.3.0 and is removed from drupal:9.0.0.
+ *   Use \Drupal\user\UserInterface::REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL
+ *   instead.
+ *
+ * @see https://www.drupal.org/node/2831620
+ */
+const USER_REGISTER_VISITORS_ADMINISTRATIVE_APPROVAL = 'visitors_admin_approval';
+ 
+
+/**
+ * Implements hook_theme().
+ */
+function brmalls_login_theme() {
+  return [
+    'user' => [
+      'render element' => 'elements',
+    ],
+    'username' => [
+      'variables' => ['account' => NULL, 'attributes' => [], 'link_options' => []],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function brmalls_login_js_settings_alter(&$settings, AttachedAssetsInterface $assets) {
+  // Provide the user ID in drupalSettings to allow JavaScript code to customize
+  // the experience for the end user, rather than the server side, which would
+  // break the render cache.
+  // Similarly, provide a permissions hash, so that permission-dependent data
+  // can be reliably cached on the client side.
+  $user = \Drupal::currentUser();
+  $settings['user']['uid'] = $user->id();
+  $settings['user']['permissionsHash'] = \Drupal::service('user_permissions_hash_generator')->generate($user);
+}
+
+/**
+ * Returns whether this site supports the default user picture feature.
+ *
+ * This approach preserves compatibility with node/comment templates. Alternate
+ * user picture implementations (e.g., Gravatar) should provide their own
+ * add/edit/delete forms and populate the 'picture' variable during the
+ * preprocess stage.
+ */
+ 
+ 
+
+/**
+ * Loads a user object.
+ *
+ * @param int $uid
+ *   Integer specifying the user ID to load.
+ * @param bool $reset
+ *   TRUE to reset the internal cache and load from the database; FALSE
+ *   (default) to load from the internal cache, if set.
+ *
+ * @return \Drupal\user\UserInterface
+ *   A fully-loaded user object upon successful user load, or NULL if the user
+ *   cannot be loaded.
+ *
+ * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use
+ *   Drupal\user\Entity\User::load().
+ *
+ * @see https://www.drupal.org/node/2266845
+ */
+function brmalls_login_load($uid, $reset = FALSE) {
+  @trigger_error('user_load() is deprecated in Drupal 8.0.0 and will be removed before Drupal 9.0.0. Use \Drupal\user\Entity\User::load(). See https://www.drupal.org/node/2266845', E_USER_DEPRECATED);
+  if ($reset) {
+    \Drupal::entityTypeManager()->getStorage('user')->resetCache([$uid]);
+  }
+  return User::load($uid);
+}
+
+/**
+ * Fetches a user object by email address.
+ *
+ * @param string $mail
+ *   String with the account's email address.
+ *
+ * @return \Drupal\user\UserInterface|false
+ *   A user entity upon successful user load, or FALSE if user cannot be loaded.
+ *
+ * @see \Drupal\user\Entity\User::loadMultiple()
+ */
+function brmalls_login_load_by_mail($mail) {
+  $users = \Drupal::entityTypeManager()->getStorage('user')
+    ->loadByProperties(['mail' => $mail]);
+  return $users ? reset($users) : FALSE;
+}
+
+/**
+ * Fetches a user object by account name.
+ *
+ * @param string $name
+ *   String with the account's user name.
+ *
+ * @return \Drupal\user\UserInterface|false
+ *   A user entity upon successful user load, or FALSE if user cannot be loaded.
+ *
+ * @see \Drupal\user\Entity\User::loadMultiple()
+ */
+function brmalls_login_load_by_name($name) {
+  $users = \Drupal::entityTypeManager()->getStorage('user')
+    ->loadByProperties(['name' => $name]);
+  return $users ? reset($users) : FALSE;
+}
+
+/**
+ * Verify the syntax of the given name.
+ *
+ * @param string $name
+ *   The user name to validate.
+ *
+ * @return string|null
+ *   A translated violation message if the name is invalid or NULL if the name
+ *   is valid.
+ */
+function brmalls_login_validate_name($name) {
+  $definition = BaseFieldDefinition::create('string')
+    ->addConstraint('UserName', []);
+  $data = \Drupal::typedDataManager()->create($definition);
+  $data->setValue($name);
+  $violations = $data->validate();
+  if (count($violations) > 0) {
+    return $violations[0]->getMessage();
+  }
+}
+
+/**
+ * Generate a random alphanumeric password.
+ *
+ * @param int $length
+ *   The desired password length, in characters.
+ *
+ * @return string
+ *   The generated random password.
+ */
+function brmalls_login_password($length = 10) {
+  // This variable contains the list of allowed characters for the password.
+  // Note that the number 0 and the letter 'O' have been removed to avoid
+  // confusion between the two. The same is true of 'I', 1, and 'l'.
+  $allowed_characters = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+  // The maximum integer we want from random_int().
+  $max = strlen($allowed_characters) - 1;
+
+  $pass = '';
+
+  for ($i = 0; $i < $length; $i++) {
+    $pass .= $allowed_characters[random_int(0, $max)];
+  }
+
+  return $pass;
+}
+ 
+  
+/**
+ * Format a username.
+ *
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   The account object for the user whose name is to be formatted.
+ *
+ * @return string
+ *   An unsanitized string with the username to display.
+ *
+ * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0.
+ *   Use $account->label() or $account->getDisplayName() instead
+ *
+ * @see https://www.drupal.org/node/3050794
+ */
+function brmalls_login_format_name(AccountInterface $account) {
+  @trigger_error('user_format_name() is deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use $account->label() or $account->getDisplayName() instead. See https://www.drupal.org/node/3050794', E_USER_DEPRECATED);
+  return $account->getDisplayName();
+}
+
+/**
+ * Implements hook_template_preprocess_default_variables_alter().
+ *
+ * @see user_user_login()
+ * @see user_user_logout()
+ */
+function brmalls_login_template_preprocess_default_variables_alter(&$variables) {
+  $user = \Drupal::currentUser();
+
+  $variables['user'] = clone $user;
+  // Remove password and session IDs, since themes should not need nor see them.
+  unset($variables['user']->pass, $variables['user']->sid, $variables['user']->ssid);
+
+  $variables['is_admin'] = $user->hasPermission('access administration pages');
+  $variables['logged_in'] = $user->isAuthenticated();
+}
+ 
+/**
+ * Implements hook_user_login().
+ */
+function brmalls_login_user_login(UserInterface $account) {
+  // Reset static cache of default variables in template_preprocess() to reflect
+  // the new user.
+  drupal_static_reset('template_preprocess');
+
+  // If the user has a NULL time zone, notify them to set a time zone.
+  $config = \Drupal::config('system.date');
+  if (!$account->getTimezone() && $config->get('timezone.user.configurable') && $config->get('timezone.user.warn')) {
+    \Drupal::messenger()
+      ->addStatus(t('Configure your <a href=":user-edit">account time zone setting</a>.', [
+        ':user-edit' => $account->toUrl('edit-form', [
+          'query' => \Drupal::destination()->getAsArray(),
+          'fragment' => 'edit-timezone',
+        ])->toString(),
+      ]));
+  }
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function brmalls_login_user_logout(AccountInterface $account) {
+  // Reset static cache of default variables in template_preprocess() to reflect
+  // the new user.
+  drupal_static_reset('template_preprocess');
+}
+
+
+/**
+ * Finalizes the login process and logs in a user.
+ *
+ * The function logs in the user, records a watchdog message about the new
+ * session, saves the login timestamp, calls hook_user_login(), and generates a
+ * new session.
+ *
+ * The current user is replaced with the passed in account.
+ *
+ * @param \Drupal\user\UserInterface $account
+ *   The account to log in.
+ *
+ * @see hook_user_login()
+ */
+function brmalls_login_finalize(UserInterface $account) {
+  \Drupal::currentUser()->setAccount($account);
+  \Drupal::logger('user')->notice('Session opened for %name.', ['%name' => $account->getAccountName()]);
+  // Update the user table timestamp noting user has logged in.
+  // This is also used to invalidate one-time login links.
+  $account->setLastLoginTime(REQUEST_TIME);
+  \Drupal::entityTypeManager()
+    ->getStorage('user')
+    ->updateLastLoginTimestamp($account);
+
+  // Regenerate the session ID to prevent against session fixation attacks.
+  // This is called before hook_user_login() in case one of those functions
+  // fails or incorrectly does a redirect which would leave the old session
+  // in place.
+  \Drupal::service('session')->migrate();
+  \Drupal::service('session')->set('uid', $account->id());
+  \Drupal::moduleHandler()->invokeAll('user_login', [$account]);
+}
+
+
+
+
+
+ 
+
+ 
+/**
+ * Retrieves the names of roles matching specified conditions.
+ *
+ * @param bool $membersonly
+ *   (optional) Set this to TRUE to exclude the 'anonymous' role. Defaults to
+ *   FALSE.
+ * @param string|null $permission
+ *   (optional) A string containing a permission. If set, only roles
+ *    containing that permission are returned. Defaults to NULL, which
+ *    returns all roles.
+ *
+ * @return array
+ *   An associative array with the role id as the key and the role name as
+ *   value.
+ */
+function brmalls_login_role_names($membersonly = FALSE, $permission = NULL) {
+  return array_map(function ($item) {
+    return $item->label();
+  }, user_roles($membersonly, $permission));
+}
+
+ 
+
+/**
+ * Retrieve an array of roles matching specified conditions.
+ *
+ * @param bool $membersonly
+ *   (optional) Set this to TRUE to exclude the 'anonymous' role. Defaults to
+ *   FALSE.
+ * @param string|null $permission
+ *   (optional) A string containing a permission. If set, only roles
+ *   containing that permission are returned. Defaults to NULL, which
+ *   returns all roles.
+ *
+ * @return \Drupal\user\RoleInterface[]
+ *   An associative array with the role id as the key and the role object as
+ *   value.
+ */
+function brmalls_login_roles($membersonly = FALSE, $permission = NULL) {
+  $roles = Role::loadMultiple();
+  if ($membersonly) {
+    unset($roles[RoleInterface::ANONYMOUS_ID]);
+  }
+
+  if (!empty($permission)) {
+    $roles = array_filter($roles, function ($role) use ($permission) {
+      return $role->hasPermission($permission);
+    });
+  }
+
+  return $roles;
+}
+
+/**
+ * Fetches a user role by role ID.
+ *
+ * @param string $rid
+ *   A string representing the role ID.
+ *
+ * @return \Drupal\user\RoleInterface|null
+ *   A fully-loaded role object if a role with the given ID exists, or NULL
+ *   otherwise.
+ *
+ * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0.
+ *   Use \Drupal\user\Entity\Role::load().
+ */
+function brmalls_login_role_load($rid) {
+  return Role::load($rid);
+}
+ 
+ 
+
+/**
+ * Saves visitor information as a cookie so it can be reused.
+ *
+ * @param array $values
+ *   An array of key/value pairs to be saved into a cookie.
+ */
+function brmalls_login_cookie_save(array $values) {
+  foreach ($values as $field => $value) {
+    // Set cookie for 365 days.
+    setrawcookie('Drupal.visitor.' . $field, rawurlencode($value), REQUEST_TIME + 31536000, '/');
+  }
+}
+
+/**
+ * Delete a visitor information cookie.
+ *
+ * @param string $cookie_name
+ *   A cookie name such as 'homepage'.
+ */
+function brmalls_login_cookie_delete($cookie_name) {
+  setrawcookie('Drupal.visitor.' . $cookie_name, '', REQUEST_TIME - 3600, '/');
+}
+ 
+/**
+ * Logs the current user out.
+ */
+function brmalls_login_logout() {
+  $user = \Drupal::currentUser();
+
+  \Drupal::logger('user')->notice('Session closed for %name.', ['%name' => $user->getAccountName()]);
+
+  \Drupal::moduleHandler()->invokeAll('user_logout', [$user]);
+
+  // Destroy the current session, and reset $user to the anonymous user.
+  // Note: In Symfony the session is intended to be destroyed with
+  // Session::invalidate(). Regrettably this method is currently broken and may
+  // lead to the creation of spurious session records in the database.
+  // @see https://github.com/symfony/symfony/issues/12375
+  \Drupal::service('session_manager')->destroy();
+  $user->setAccount(new AnonymousUserSession());
+}
+
+ 

@@ -1,0 +1,5 @@
+name: 'brmalls_navigationType'
+type: module
+description: 'Modulo de condicional de campos de Navegation Type'
+core: 8.x
+package: Br Malls

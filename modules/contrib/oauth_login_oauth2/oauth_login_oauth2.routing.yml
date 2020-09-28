@@ -1,0 +1,79 @@
+
+oauth_login_oauth2.customer_setup:
+  path: /admin/config/people/oauth_login_oauth2/customer_setup
+  defaults:
+    _title: 'Drupal OAuth Login Configuration'
+    _form: \Drupal\oauth_login_oauth2\Form\MiniorangeOAuthClientCustomerSetup
+  requirements:
+    _permission: 'administer site configuration'
+
+oauth_login_oauth2.config_clc:
+  path: /admin/config/people/oauth_login_oauth2/config_clc
+  defaults:
+    _title: 'Drupal OAuth Login Configuration'
+    _form: \Drupal\oauth_login_oauth2\Form\MiniorangeConfigOAuthClient
+  requirements:
+    _permission: 'administer site configuration'
+
+oauth_login_oauth2.mapping:
+  path: /admin/config/people/oauth_login_oauth2/mapping
+  defaults:
+    _title: 'Drupal OAuth Login Configuration'
+    _form: \Drupal\oauth_login_oauth2\Form\MiniorangeMapping
+  requirements:
+    _permission: 'administer site configuration'
+
+oauth_login_oauth2.settings:
+  path: /admin/config/people/oauth_login_oauth2/Settings
+  defaults:
+    _title: 'Drupal OAuth Login Configuration'
+    _form: \Drupal\oauth_login_oauth2\Form\Settings
+  requirements:
+    _permission: 'administer site configuration'
+
+oauth_login_oauth2.licensing:
+  path: /admin/config/people/oauth_login_oauth2/licensing
+  defaults:
+    _title: 'Drupal OAuth Login Configuration'
+    _form: \Drupal\oauth_login_oauth2\Form\MiniorangeLicensing
+  requirements:
+    _permission: 'administer site configuration'
+
+oauth_login_oauth2.request_for_demo:
+  path: /admin/config/people/oauth_login_oauth2/request_for_demo
+  defaults:
+    _title: 'Drupal OAuth Login Configuration'
+    _form: \Drupal\oauth_login_oauth2\Form\MiniorangeRFD
+  requirements:
+    _permission: 'administer site configuration'
+
+oauth_login_oauth2.mo_login:
+  path: /mo_login
+  defaults:
+    _controller: '\Drupal\oauth_login_oauth2\Controller\miniorange_oauth_clientController::miniorange_oauth_client_mo_login'
+  requirements:
+    _access: 'TRUE'
+oauth_login_oauth2.moLogin:
+  path: /moLogin
+  defaults:
+    _controller: '\Drupal\oauth_login_oauth2\Controller\miniorange_oauth_clientController::miniorange_oauth_client_mologin'
+  requirements:
+    _access: 'TRUE'
+oauth_login_oauth2.testConfig:
+  path: /testConfig
+  defaults:
+    _controller: '\Drupal\oauth_login_oauth2\Controller\miniorange_oauth_clientController::test_mo_config'
+  requirements:
+    _permission: 'administer site cofiguration'
+oauth_login_oauth2.resetConfig:
+  path: /resetConfig
+  defaults:
+    _controller: '\Drupal\oauth_login_oauth2\Controller\miniorange_oauth_clientController::reset_mo_config'
+  requirements:
+    _permission: 'administer site cofiguration'
+oauth_login_oauth2.feedback:
+  path: /feedback
+  defaults:
+    _controller: '\Drupal\oauth_login_oauth2\Controller\miniorange_oauth_clientController::miniorange_oauth_client_feedback_func'
+  requirements:
+    _permission: 'administer site cofiguration'

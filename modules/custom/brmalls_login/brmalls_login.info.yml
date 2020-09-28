@@ -1,0 +1,11 @@
+name: 'BrMalls Login'
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+description: 'This module allows you to login in your Drupal site  using any oauth2 or openId complaint server of BrMalls.'
+package: Br Malls
+
+# Information added by Drupal.org packaging script on 2020-08-14
+version: '1.0.0'
+project: 'brmalls_login'
+datestamp: 1597428452

@@ -1,0 +1,39 @@
+
+brmalls_login.login:
+  path: '/brmalls/login'
+  defaults:
+    _form: '\Drupal\brmalls_login\Form\UserLoginForm'
+    _title: 'Log in'
+  requirements:
+    _user_is_logged_in: 'FALSE'
+  options:
+    _maintenance_access: TRUE
+
+brmalls_login.login.http:
+  path: '/brmalls/login'
+  defaults:
+    _controller: \Drupal\brmalls_login\Controller\UserAuthenticationController::login
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'FALSE'
+    _format: 'json'
+
+brmalls_login.login_status.http:
+  path: '/brmalls/login_status'
+  defaults:
+    _controller: \Drupal\brmalls_login\Controller\UserAuthenticationController::loginStatus
+  methods: [GET]
+  requirements:
+    _access: 'TRUE'
+    _format: 'json'
+
+brmalls_login.logout.http:
+  path: '/brmalls/logout'
+  defaults:
+    _controller: \Drupal\brmalls_login\Controller\UserAuthenticationController::logout
+  methods: [POST]
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    _format: 'json'
+    _csrf_token: 'TRUE'
+    

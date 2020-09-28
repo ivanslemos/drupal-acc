@@ -1,0 +1,31 @@
+field_formatter_settings_swagger_ui_base:
+  type: mapping
+  mapping:
+    validator:
+      type: string
+      label: 'Validator'
+    validator_url:
+      type: string
+      label: 'Validator URL'
+    doc_expansion:
+      type: string
+      label: 'Doc Expansion'
+    show_top_bar:
+      type: boolean
+      label: 'Show Top Bar'
+    sort_tags_by_name:
+      type: boolean
+      label: 'Sort tags by name'
+    supported_submit_methods:
+      type: sequence
+      sequence:
+        type: string
+      label: 'Try it out support for HTTP Methods'
+
+field.formatter.settings.swagger_ui_file:
+  type: field_formatter_settings_swagger_ui_base
+  label: 'Swagger UI file field formatter settings'
+
+field.formatter.settings.swagger_ui_link:
+  type: field_formatter_settings_swagger_ui_base
+  label: 'Swagger UI link field formatter settings'
