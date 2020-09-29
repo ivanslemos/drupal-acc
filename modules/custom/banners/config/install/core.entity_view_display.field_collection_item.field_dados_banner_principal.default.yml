@@ -1,0 +1,86 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.field.field_collection_item.field_dados_banner_principal.field_banner_ativado
+    - field.field.field_collection_item.field_dados_banner_principal.field_cor_texto
+    - field.field.field_collection_item.field_dados_banner_principal.field_imagem_banner
+    - field.field.field_collection_item.field_dados_banner_principal.field_link_banner
+    - field.field.field_collection_item.field_dados_banner_principal.field_subtitulo_banner
+    - field.field.field_collection_item.field_dados_banner_principal.field_tipo_link
+    - field.field.field_collection_item.field_dados_banner_principal.field_titulo_banner
+    - field_collection.field_collection.field_dados_banner_principal
+  module:
+    - color_field
+    - image
+    - link
+    - options
+id: field_collection_item.field_dados_banner_principal.default
+targetEntityType: field_collection_item
+bundle: field_dados_banner_principal
+mode: default
+content:
+  field_banner_ativado:
+    weight: 6
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_cor_texto:
+    weight: 5
+    label: above
+    settings:
+      format: hex
+      opacity: '0'
+    third_party_settings: {  }
+    type: color_field_formatter_text
+    region: content
+  field_imagem_banner:
+    weight: 2
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_link_banner:
+    weight: 3
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_subtitulo_banner:
+    weight: 1
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_tipo_link:
+    weight: 4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_titulo_banner:
+    weight: 0
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden: {  }

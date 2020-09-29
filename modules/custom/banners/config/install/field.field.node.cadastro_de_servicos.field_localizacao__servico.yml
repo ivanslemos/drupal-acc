@@ -1,0 +1,18 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_localizacao__servico
+    - node.type.cadastro_de_servicos
+id: node.cadastro_de_servicos.field_localizacao__servico
+field_name: field_localizacao__servico
+entity_type: node
+bundle: cadastro_de_servicos
+label: 'Localização do Serviço'
+description: ' Digite a localização do serviço <strong>Ex.: Primeiro Piso</strong>'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

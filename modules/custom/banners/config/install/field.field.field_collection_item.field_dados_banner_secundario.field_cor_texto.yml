@@ -1,0 +1,21 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.field_collection_item.field_cor_texto
+    - field_collection.field_collection.field_dados_banner_secundario
+  module:
+    - color_field
+id: field_collection_item.field_dados_banner_secundario.field_cor_texto
+field_name: field_cor_texto
+entity_type: field_collection_item
+bundle: field_dados_banner_secundario
+label: 'Cor do Texto'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  opacity: 0
+field_type: color_field_type

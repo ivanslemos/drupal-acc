@@ -1,0 +1,17 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - node.type.inclusao_de_servicos
+id: node.inclusao_de_servicos.title
+field_name: title
+entity_type: node
+bundle: inclusao_de_servicos
+label: 'Serviços Nome do Shopping'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

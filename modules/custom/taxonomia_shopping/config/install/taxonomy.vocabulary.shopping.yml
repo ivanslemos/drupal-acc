@@ -1,0 +1,7 @@
+langcode: pt-br
+status: true
+dependencies: {  }
+name: Shopping
+vid: shopping
+description: ''
+weight: 0

@@ -1,0 +1,5 @@
+langcode: pt-br
+status: true
+dependencies: {  }
+id: field_dados_banner_secundario
+label: field_dados_banner_secundario

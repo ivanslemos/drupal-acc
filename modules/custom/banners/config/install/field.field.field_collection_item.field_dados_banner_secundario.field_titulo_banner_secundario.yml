@@ -1,0 +1,18 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.field_collection_item.field_titulo_banner_secundario
+    - field_collection.field_collection.field_dados_banner_secundario
+id: field_collection_item.field_dados_banner_secundario.field_titulo_banner_secundario
+field_name: field_titulo_banner_secundario
+entity_type: field_collection_item
+bundle: field_dados_banner_secundario
+label: 'Título do Banner'
+description: '<strong>Este campo permite até 54 caracteres.</strong>'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

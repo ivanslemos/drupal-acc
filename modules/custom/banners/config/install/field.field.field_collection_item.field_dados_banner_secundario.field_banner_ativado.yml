@@ -1,0 +1,22 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.field_collection_item.field_banner_ativado
+    - field_collection.field_collection.field_dados_banner_secundario
+id: field_collection_item.field_dados_banner_secundario.field_banner_ativado
+field_name: field_banner_ativado
+entity_type: field_collection_item
+bundle: field_dados_banner_secundario
+label: 'Banner Ativo'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: Habilitado
+  off_label: Desliga
+field_type: boolean

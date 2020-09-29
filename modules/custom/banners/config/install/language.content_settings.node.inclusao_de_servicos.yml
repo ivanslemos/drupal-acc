@@ -1,0 +1,10 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - node.type.inclusao_de_servicos
+id: node.inclusao_de_servicos
+target_entity_type_id: node
+target_bundle: inclusao_de_servicos
+default_langcode: site_default
+language_alterable: false

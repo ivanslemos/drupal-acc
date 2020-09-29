@@ -1,0 +1,17 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - node.type.banner_secundario
+id: node.banner_secundario.title
+field_name: title
+entity_type: node
+bundle: banner_secundario
+label: 'Nome do Banner'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

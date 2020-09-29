@@ -1,0 +1,18 @@
+langcode: pt-br
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - admin
+      - main
+    parent: 'main:'
+name: 'Banner Principal'
+type: banner_principal
+description: 'Cadastro de Banner Principal'
+help: "Coloque no Título principal como no exemplo: Banner Principal NOME_DO_SHOPPING,\r\nalterando o que está em Caixa Alta."
+new_revision: false
+preview_mode: 0
+display_submitted: false

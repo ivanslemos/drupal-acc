@@ -1,0 +1,18 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.field_collection_item.field_periodo_
+    - field_collection.field_collection.field_dados_banner_novidades
+id: field_collection_item.field_dados_banner_novidades.field_periodo_
+field_name: field_periodo_
+entity_type: field_collection_item
+bundle: field_dados_banner_novidades
+label: Período
+description: 'Digite o período como no exemplo: <strong> de 01/04 a 01/05 </strong>'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,23 @@
+name: 'Taxonomia Shopping'
+type: module
+core: 8.x
+dependencies:
+  - color_field
+  - datetime
+  - field
+  - field_collection
+  - field_permissions
+  - file
+  - hal
+  - image
+  - language
+  - link
+  - node
+  - options
+  - rest
+  - schemata_json_schema
+  - serialization
+  - taxonomy
+  - user
+  - views
+version: 8.0-0

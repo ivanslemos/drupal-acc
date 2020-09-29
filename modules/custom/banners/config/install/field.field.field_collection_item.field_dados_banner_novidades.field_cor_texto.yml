@@ -1,0 +1,21 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.field_collection_item.field_cor_texto
+    - field_collection.field_collection.field_dados_banner_novidades
+  module:
+    - color_field
+id: field_collection_item.field_dados_banner_novidades.field_cor_texto
+field_name: field_cor_texto
+entity_type: field_collection_item
+bundle: field_dados_banner_novidades
+label: 'Cor do Texto'
+description: '<strong>Selecione a cor do texto.</strong>'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  opacity: 0
+field_type: color_field_type

@@ -1,0 +1,39 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.field.node.cadastro_de_servicos.field_imagem_servico
+    - field.field.node.cadastro_de_servicos.field_localizacao__servico
+    - node.type.cadastro_de_servicos
+  module:
+    - image
+    - user
+id: node.cadastro_de_servicos.default
+targetEntityType: node
+bundle: cadastro_de_servicos
+mode: default
+content:
+  field_imagem_servico:
+    weight: 101
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_localizacao__servico:
+    weight: 102
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  langcode: true

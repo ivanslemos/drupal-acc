@@ -1,0 +1,27 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_servico
+    - node.type.cadastro_de_servicos
+    - node.type.inclusao_de_servicos
+id: node.inclusao_de_servicos.field_servico
+field_name: field_servico
+entity_type: node
+bundle: inclusao_de_servicos
+label: Serviços
+description: '<strong> Selecione os serviços que deseja habilitar para o shopping</strong>'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      cadastro_de_servicos: cadastro_de_servicos
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

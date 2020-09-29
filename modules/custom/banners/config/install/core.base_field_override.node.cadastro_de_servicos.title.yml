@@ -1,0 +1,17 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - node.type.cadastro_de_servicos
+id: node.cadastro_de_servicos.title
+field_name: title
+entity_type: node
+bundle: cadastro_de_servicos
+label: 'Nome do Serviço'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,24 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.cadastro_de_servicos.field_imagem_servico
+    - field.field.node.cadastro_de_servicos.field_localizacao__servico
+    - node.type.cadastro_de_servicos
+  module:
+    - user
+id: node.cadastro_de_servicos.teaser
+targetEntityType: node
+bundle: cadastro_de_servicos
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_imagem_servico: true
+  field_localizacao__servico: true
+  langcode: true

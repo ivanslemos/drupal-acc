@@ -1,0 +1,22 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.field_collection_item.field_link_banner
+    - field_collection.field_collection.field_dados_banner_novidades
+  module:
+    - link
+id: field_collection_item.field_dados_banner_novidades.field_link_banner
+field_name: field_link_banner
+entity_type: field_collection_item
+bundle: field_dados_banner_novidades
+label: 'Link do Banner'
+description: '<strong>Caso queira que o banner tenha um link preencha esse campo.</strong>'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link

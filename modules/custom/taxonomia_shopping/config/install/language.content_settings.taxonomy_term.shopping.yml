@@ -1,0 +1,10 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.shopping
+id: taxonomy_term.shopping
+target_entity_type_id: taxonomy_term
+target_bundle: shopping
+default_langcode: site_default
+language_alterable: false

@@ -1,0 +1,29 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dados_banner_novidades
+    - field_collection.field_collection.field_dados_banner_novidades
+    - node.type.banner_novidades
+  module:
+    - field_collection
+id: node.banner_novidades.field_dados_banner_novidades
+field_name: field_dados_banner_novidades
+entity_type: node
+bundle: banner_novidades
+label: 'Cadastro de Banner Novidades'
+description: '<strong>Este cadastro permite adicionar quantos banner desejar, apenas clique no botão de "Adicionar outro item" para cadastrar um novo banner.</strong>'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:field_collection_item'
+  handler_settings:
+    target_bundles:
+      field_dados_banner_novidades: field_dados_banner_novidades
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: field_collection

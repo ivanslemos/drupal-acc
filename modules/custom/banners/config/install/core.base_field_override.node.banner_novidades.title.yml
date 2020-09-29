@@ -1,0 +1,17 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - node.type.banner_novidades
+id: node.banner_novidades.title
+field_name: title
+entity_type: node
+bundle: banner_novidades
+label: 'Nome do Shopping'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

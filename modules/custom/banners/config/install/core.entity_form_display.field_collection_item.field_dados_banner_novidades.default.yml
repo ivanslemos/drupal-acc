@@ -1,0 +1,92 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.field.field_collection_item.field_dados_banner_novidades.field_banner_ativado
+    - field.field.field_collection_item.field_dados_banner_novidades.field_cor_texto
+    - field.field.field_collection_item.field_dados_banner_novidades.field_descricao_banner
+    - field.field.field_collection_item.field_dados_banner_novidades.field_imagem_banner
+    - field.field.field_collection_item.field_dados_banner_novidades.field_link_banner
+    - field.field.field_collection_item.field_dados_banner_novidades.field_periodo_
+    - field.field.field_collection_item.field_dados_banner_novidades.field_subtitulo_banner
+    - field.field.field_collection_item.field_dados_banner_novidades.field_tipo_link
+    - field.field.field_collection_item.field_dados_banner_novidades.field_titulo_banner_novidades
+    - field_collection.field_collection.field_dados_banner_novidades
+    - image.style.thumbnail
+  module:
+    - color_field
+    - image
+    - link
+id: field_collection_item.field_dados_banner_novidades.default
+targetEntityType: field_collection_item
+bundle: field_dados_banner_novidades
+mode: default
+content:
+  field_banner_ativado:
+    weight: 0
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_cor_texto:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: color_field_widget_html5
+    region: content
+  field_descricao_banner:
+    weight: 4
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_imagem_banner:
+    weight: 6
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_link_banner:
+    weight: 7
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_periodo_:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_subtitulo_banner:
+    weight: 2
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_tipo_link:
+    weight: 8
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_titulo_banner_novidades:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden: {  }

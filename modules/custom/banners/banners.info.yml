@@ -1,0 +1,22 @@
+name: Banners
+type: module
+core: 8.x
+dependencies:
+  - color_field
+  - field
+  - field_collection
+  - field_permissions
+  - file
+  - image
+  - language
+  - link
+  - menu_ui
+  - node
+  - options
+  - path
+  - rest
+  - serialization
+  - taxonomy
+  - user
+  - views
+version: 8.0-0

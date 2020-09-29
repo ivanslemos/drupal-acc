@@ -1,0 +1,74 @@
+langcode: pt-br
+status: true
+dependencies:
+  config:
+    - field.field.field_collection_item.field_dados_banner_principal.field_banner_ativado
+    - field.field.field_collection_item.field_dados_banner_principal.field_cor_texto
+    - field.field.field_collection_item.field_dados_banner_principal.field_imagem_banner
+    - field.field.field_collection_item.field_dados_banner_principal.field_link_banner
+    - field.field.field_collection_item.field_dados_banner_principal.field_subtitulo_banner
+    - field.field.field_collection_item.field_dados_banner_principal.field_tipo_link
+    - field.field.field_collection_item.field_dados_banner_principal.field_titulo_banner
+    - field_collection.field_collection.field_dados_banner_principal
+    - image.style.thumbnail
+  module:
+    - color_field
+    - image
+    - link
+id: field_collection_item.field_dados_banner_principal.default
+targetEntityType: field_collection_item
+bundle: field_dados_banner_principal
+mode: default
+content:
+  field_banner_ativado:
+    weight: 0
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_cor_texto:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: color_field_widget_html5
+    region: content
+  field_imagem_banner:
+    weight: 4
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_link_banner:
+    weight: 5
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_subtitulo_banner:
+    weight: 2
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_tipo_link:
+    weight: 6
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_titulo_banner:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+hidden: {  }
